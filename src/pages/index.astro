@@ -1,0 +1,36 @@
+---
+import {db, eq, User, Todo, Category} from "astro:db"
+const users = await db
+	.select()
+	.from(User)
+const todos = await db
+	.select()
+	.from(Todo)
+	.innerJoin(User, eq(Todo.user_id, User.id))
+	.innerJoin(Category, eq(Todo.category_id, Category.id))
+	//.where(eq(User.username, 'jeremias'))
+
+//console.log(todos)
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body>
+		<h1>Todo:</h1>
+		<ul>
+			{
+				todos.map(todo => (<li>
+									{'Title: ' +todo.Todo.title}
+									{'Category: ' +todo.Category.label}
+									{'User: ' +todo.User.username}
+								   </li>))
+			}
+		</ul>
+	</body>
+</html>
